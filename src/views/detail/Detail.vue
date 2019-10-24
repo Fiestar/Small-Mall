@@ -8,7 +8,7 @@
       <detail-pro-param :proparam='proparam' ref="proparam"/>
       <detail-rec :recommendInfo='recommend' @imageLoad='imageLoad' ref="rec"/>
     </scroll>
-    <detail-bottom />
+    <detail-bottom @addCart = "addCart"/>
     <back-top @click.native="backtop" v-show="show"/>
   </div>
 </template>
@@ -59,7 +59,6 @@ export default {
   created() {
     this.iid = this.$route.query.iid
     GetDetailData(this.iid).then(res=>{
-      console.log(res)
       const data = res.result;
       //获取商品banner图
       this.banner.push(...data.itemInfo.topImages)
@@ -100,6 +99,21 @@ export default {
       }
       // this.currentIndex = i;
       this.$refs.bar.currentIndex = i;
+    },
+    addCart() {
+      //获取购物车需要展示的信息，对象的形式
+      const product = {};
+      product.image = this.banner[0];
+      product.title = this.DetailInfo.title;
+      product.desc = this.DetailInfo.desc;
+      product.price = this.DetailInfo.realPrice;
+      product.iid = this.iid;
+      product.newPrice = this.newPrice;
+
+      //将商品添加购物车里 vuex
+      this.$store.dispatch('addCart',product).then(res => {
+        console.log(res)
+      })
     },
     imageLoad(){
       this.$refs.wrapper.scroll.refresh()
