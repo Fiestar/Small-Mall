@@ -112,7 +112,7 @@ export default {
 
       //将商品添加购物车里 vuex
       this.$store.dispatch('addCart',product).then(res => {
-        console.log(res)
+        alert(res)
       })
     },
     imageLoad(){
